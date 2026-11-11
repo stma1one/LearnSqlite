@@ -11,6 +11,22 @@ Guide coding agents that help high-school students build .NET MAUI projects. The
 
 Use this skill whenever the user is working on a .NET MAUI student project, especially when the work involves MVVM, XAML, Shell navigation, dependency injection, async code, commands, validation, services, tests, or learning documentation.
 
+## SQLite Package Policy (Required)
+
+For student projects that use SQLite, follow this approved package policy:
+
+- **Basic CRUD:** use the NuGet package `sqlite-net-pcl` (SQLite-net), following Microsoft's .NET MAUI guide: https://learn.microsoft.com/en-us/dotnet/maui/data-cloud/database-sqlite?view=net-maui-10.0
+- **Relationships:** only when the data model actually requires one-to-one, one-to-many, or many-to-many relationships, add NuGet package `SQLiteNetExtensions` on top of `sqlite-net-pcl`. Use the relevant guides:
+  - One-to-one: https://www.codejourney.net/sqlite-net-extensions-one-to-one-relationships/
+  - One-to-many: https://www.codejourney.net/sqlite-net-extensions-one-to-many-relationships/
+  - Many-to-many: https://www.codejourney.net/sqlite-net-extensions-many-to-many-relationships/
+
+Do not add alternative SQLite providers, ORMs, or wrappers, including EF Core SQLite, `Microsoft.Data.Sqlite`, `System.Data.SQLite`, or Dapper. Do not add `SQLitePCLRaw.bundle_green` as a separate direct package for the approved basic CRUD setup: native SQLite components are resolved through the approved package's dependency graph. Do not add `SQLiteNetExtensions` to projects that do not need relationships.
+
+Pin a currently supported stable `sqlite-net-pcl` version after checking NuGet compatibility and vulnerability information. The LearnSqlite sample is updated to `1.11.285`; do not copy an older version blindly. Before adding relationship support, verify the exact `SQLiteNetExtensions` package ID/version, target-framework compatibility, attributes, and loading/saving APIs. Never guess APIs or silently add another package.
+
+Keep persistence inside Services/Repositories, use async database APIs, and keep SQL/persistence details out of Views and ViewModels. Run restore, build, and NuGet vulnerability checks (including transitive dependencies) before declaring the database work verified.
+
 ## Required First Step
 
 Read the project mode file if it exists:
