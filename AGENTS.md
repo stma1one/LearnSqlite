@@ -66,6 +66,15 @@ PLANNING_COACH
 - Keep learning documentation in Hebrew when the student works in Hebrew.
 - Run build/tests/validation before declaring PASS.
 
+## SQLite Package Rule
+
+For SQLite projects, use `sqlite-net-pcl` for basic CRUD. Add `SQLiteNetExtensions` only when one-to-one, one-to-many, or many-to-many relationships are required. Follow Microsoft's MAUI guide (https://learn.microsoft.com/en-us/dotnet/maui/data-cloud/database-sqlite?view=net-maui-10.0) and the relationship guides:
+- https://www.codejourney.net/sqlite-net-extensions-one-to-one-relationships/
+- https://www.codejourney.net/sqlite-net-extensions-one-to-many-relationships/
+- https://www.codejourney.net/sqlite-net-extensions-many-to-many-relationships/
+
+Do not add EF Core SQLite, `Microsoft.Data.Sqlite`, `System.Data.SQLite`, Dapper, other SQLite ORMs/providers/wrappers, or a separate direct `SQLitePCLRaw.bundle_green` reference for the standard CRUD setup. Do not install `SQLiteNetExtensions` when relationships are not needed. Verify package versions, dependency graph, target frameworks, and exact APIs; run restore/build and transitive vulnerability checks.
+
 ## Expected Project Structure
 
 ```text
