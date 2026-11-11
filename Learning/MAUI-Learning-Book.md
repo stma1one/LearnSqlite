@@ -210,9 +210,17 @@ public partial class AppShell : Shell
 
 לאחר שווידאנו שכל 3 המסכים וזרימת ה-MVVM פועלים כשורה בענף `master`, יצרנו את ענף `sqlite` וביצענו בו 4 צעדים ממוקדים:
 
-### 8.1 התקנת חבילות ה-NuGet של SQLite ב-`LearnSqlite.csproj`
-* **`sqlite-net-pcl` (גרסה `1.9.172`):** ספריית ה-ORM הקלילה המאפשרת מיפוי מחלקות C# לטבלאות SQLite וביצוע פעולות CRUD א-סינכרוניות באמצעות `SQLiteAsyncConnection`.
-* **`SQLitePCLRaw.bundle_green` (גרסה `2.1.11`):** חבילת הספקים הטבעיים (Native C/C++ binaries) הנדרשת להרצת מנוע SQLite על גבי Android, Windows, iOS ו-MacCatalyst.
+### 8.1 התקנת חבילת ה-NuGet של SQLite ב-`LearnSqlite.csproj`
+* **`sqlite-net-pcl` (גרסה `1.11.285`):** החבילה הישירה היחידה שנדרשת בפרויקט הדוגמה עבור CRUD מול SQLite, באמצעות `SQLiteAsyncConnection`.
+* אין להוסיף הפניה ישירה ל-`SQLitePCLRaw.bundle_green` בהתקנה הרגילה; רכיבי SQLite native נפתרים דרך גרף התלויות של `sqlite-net-pcl`. לאחר Restore יש לבדוק את התלויות והחולשות הטרנזיטיביות.
+* **`SQLiteNetExtensions` אינה מותקנת בפרויקט הזה**, משום שיש בו טבלה אחת ללא קשרים. בפרויקט שדורש one-to-one, one-to-many או many-to-many מוסיפים אותה רק לאחר בדיקת התאימות וה-API, לפי [מדריך one-to-one](https://www.codejourney.net/sqlite-net-extensions-one-to-one-relationships/), [מדריך one-to-many](https://www.codejourney.net/sqlite-net-extensions-one-to-many-relationships/) ו-[מדריך many-to-many](https://www.codejourney.net/sqlite-net-extensions-many-to-many-relationships/).
+
+בדיקות מומלצות לאחר התקנה:
+```bash
+dotnet restore
+dotnet build
+dotnet list LearnSqlite/LearnSqlite.csproj package --vulnerable --include-transitive
+```
 
 ### 8.2 עיטור המודל `HeroItem` בתכונות מיפוי לטבלה (Attributes)
 במחלקה `LearnSqlite/Models/HeroItem.cs` הוספנו את תכונות ה-ORM של `SQLite`:
