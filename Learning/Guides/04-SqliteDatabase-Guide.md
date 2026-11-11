@@ -15,25 +15,44 @@
 
 ### בלוק 1: התקנת חבילות ה-NuGet עבור SQLite ב-.NET MAUI
 
-![בלוק 1 - חבילות NuGet עבור SQLite](../Images/SqliteDatabase-block1-nuget-packages.png)
-
 * **קובץ ושכבה:** `LearnSqlite/LearnSqlite.csproj` (הגדרות הפרויקט).
-* **מה הקוד עושה:** מוסיף שתי חבילות NuGet משלימות:
-  1. `sqlite-net-pcl` — ספריית ORM קלילה המאפשרת למפות מחלקות C# לטבלאות SQLite ולבצע פעולות CRUD א-סינכרוניות (`SQLiteAsyncConnection`) ללא כתיבת משפטי SQL ידניים.
-  2. `SQLitePCLRaw.bundle_green` — חבילת ה-"Batteries Included" המספקת את ספריות ה-C/C++ הטבעיות (`e_sqlite3`) עבור Android, Windows, iOS ו-MacCatalyst.
+* **מה הקוד עושה:** מוסיף חבילת NuGet ישירה אחת בלבד:
+  - `sqlite-net-pcl` (בפרויקט הדוגמה: גרסה `1.11.285`) — ספריית SQLite-net למיפוי מחלקות C# לטבלאות ולפעולות CRUD א-סינכרוניות באמצעות `SQLiteAsyncConnection`.
+
+החבילה מביאה את רכיבי SQLite הנדרשים דרך גרף התלויות שלה. אין להוסיף לפרויקט הפניה ישירה נפרדת ל-`SQLitePCLRaw.bundle_green` בהתקנה הרגילה של `sqlite-net-pcl`. יש לבדוק את גרף התלויות בפועל אחרי Restore.
 
 ```xml
 <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
 </ItemGroup>
 ```
 
-* **נקודת בדיקה לתלמיד (Checkpoint):** מדוע לא מספיק להתקין רק את `sqlite-net-pcl` ב-.NET MAUI, ומה תפקידה של `SQLitePCLRaw.bundle_green` בזמן ריצה על אנדרואיד או Windows?
+**התקנה דרך CLI:**
+```bash
+dotnet add LearnSqlite/LearnSqlite.csproj package sqlite-net-pcl --version 1.11.285
+dotnet restore
+dotnet build
+dotnet list LearnSqlite/LearnSqlite.csproj package --vulnerable --include-transitive
+```
+
+> **הערת גרסאות ואבטחה:** הדוגמה עודכנה מגרסה `1.9.172` לגרסה יציבה חדשה יותר `1.11.285`. בגרסה הישנה דווחה חולשת אבטחה ברכיב SQLite native שנמשך כתלות; לכן אין להעתיק גרסאות ישנות או לקבע ידנית bundle ישן. יש לבדוק את NuGet ואת התלויות הטרנזיטיביות בכל עדכון.
+
+* **נקודת בדיקה לתלמיד (Checkpoint):** איזו חבילה מוסיפים ישירות לפרויקט, ואיך אפשר לבדוק אילו רכיבים נוספים הותקנו כתלויות שלה?
 
 ---
+
+### מתי נדרשת חבילת קשרים?
+
+בפרויקט הדוגמה הנוכחי יש טבלת `Heroes` אחת בלבד, ולכן **אין להתקין** `SQLiteNetExtensions`.
+
+בפרויקט אחר, אם המודל באמת כולל קשרים בין טבלאות, אפשר להוסיף את NuGet `SQLiteNetExtensions` בנוסף ל-`sqlite-net-pcl`:
+- [One-to-one](https://www.codejourney.net/sqlite-net-extensions-one-to-one-relationships/)
+- [One-to-many](https://www.codejourney.net/sqlite-net-extensions-one-to-many-relationships/)
+- [Many-to-many](https://www.codejourney.net/sqlite-net-extensions-many-to-many-relationships/)
+
+יש לוודא את גרסת החבילה, תאימותה לגרסת `sqlite-net-pcl`, ואת שמות ה-attributes ומתודות הטעינה/שמירה בתיעוד לפני השימוש. אין להוסיף ORM או ספק SQLite אחר.
 
 ### בלוק 2: עיטור המודל `HeroItem` בתכונות מיפוי לטבלה (SQLite Attributes)
 
