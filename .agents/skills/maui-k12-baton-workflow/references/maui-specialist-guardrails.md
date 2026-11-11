@@ -2,6 +2,25 @@
 
 Read this reference during `EXECUTION_AGENT` or `VERIFICATION_AUDITOR` when the current slice touches architecture, XAML, Shell navigation, tests, style resources, audit, or Hebrew learning documentation.
 
+## Approved SQLite Stack (Non-Negotiable)
+
+For SQLite student projects, use only this approved stack:
+1. `sqlite-net-pcl` for basic CRUD, following https://learn.microsoft.com/en-us/dotnet/maui/data-cloud/database-sqlite?view=net-maui-10.0
+2. `SQLiteNetExtensions` as an optional addition to `sqlite-net-pcl` only when one-to-one, one-to-many, or many-to-many relationships are genuinely required. Reference guides:
+   - https://www.codejourney.net/sqlite-net-extensions-one-to-one-relationships/
+   - https://www.codejourney.net/sqlite-net-extensions-one-to-many-relationships/
+   - https://www.codejourney.net/sqlite-net-extensions-many-to-many-relationships/
+
+Do not use EF Core SQLite, `Microsoft.Data.Sqlite`, `System.Data.SQLite`, Dapper, or another SQLite ORM/provider/wrapper. Do not directly add `SQLitePCLRaw.bundle_green` for the standard `sqlite-net-pcl` CRUD setup; use the dependency graph supplied by the approved package. Do not add `SQLiteNetExtensions` when the model has no relationships.
+
+Implementation and verification:
+- Keep database access in a Service/Repository, never in a View or ViewModel.
+- Use async APIs; do not block with `.Result` or `.Wait()`.
+- Verify stable package versions, target-framework compatibility, exact APIs, and dependency graphs against NuGet and the linked docs before implementation.
+- Run `dotnet restore`, `dotnet build`, and `dotnet list package --vulnerable --include-transitive`.
+- For relationships, identify cardinality and verify extension attributes plus loading/saving behavior; relationship loading is not assumed to happen automatically.
+- If the approved packages cannot meet a requirement, explain the limitation and ask before proposing a deviation.
+
 ## Architecture And State
 
 - Keep the project student-readable. Avoid enterprise abstractions unless they remove real complexity.
