@@ -22,4 +22,5 @@
   - `Validate-Maui-ObsoleteApis.ps1`
   - `Validate-Maui-XamlResources.ps1`
   - `Generate-Learning-Book-Pdf.py` + `MAUI-Learning-Book.validation.json`
-- **Status:** COMPLETE
+- **Status:** READY_TO_VERIFY
+- **Verification note:** קובצי הקוד והתיעוד נבדקו סטטית דרך GitHub. `dotnet restore`, `dotnet build` והרצה על Android עדיין לא בוצעו בסביבת העבודה הזו; אין לסמן PASS עד להרצתם.
